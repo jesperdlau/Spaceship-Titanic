@@ -5,20 +5,23 @@ from sklearn import preprocessing
 
 # Helping functions
 
-min_max_scaler = preprocessing.MinMaxScaler()
+# TODO: Brug først StandardScaler(). Senere Min-Max, når der skal laves ML. Eller hvad?
+scalar = preprocessing.StandardScaler()
+#scalar = preprocessing.MinMaxScaler()
 
-def mm_scale_column(df, col):
+def scale_column(df, col):
     col_np = df[col].to_numpy()
     col_list = [[val] for val in col_np]
-    col_scaled = min_max_scaler.fit_transform(col_list)
+    col_scaled = scalar.fit_transform(col_list)
     return col_scaled
 
 
 # Input data csv
 filename_train = "Spaceship-Titanic/Data/train.csv"
+filename_train_abs = "/home/jesper/Documents/MachineLearning/Spaceship-Titanic/Data/train.csv"
 # filename_test = "./Data/test.csv"
 
-df = pd.read_csv(filename_train)
+df = pd.read_csv(filename_train_abs)
 
 # PassengerId
 # TODO: Ignore for now. Be aware of column indexing when undeleting
@@ -58,7 +61,7 @@ df.insert(6, column="Dest_PSO", value=h["Dest_TRAPPIST-1e"])
 # Min-Max scaling of age. 
 # TODO: problem with outliers and When test data has different range than train data! 
 df.dropna(subset=["Age"], inplace=True)
-df["Age"] = mm_scale_column(df, "Age")
+df["Age"] = scale_column(df, "Age")
 
 # VIP
 # Fills nan to False/0 because they account for the vast majority
@@ -68,7 +71,7 @@ df["VIP"] = df["VIP"].astype(int)
 
 
 # The following 5 attributes account for spending
-# TODO: combined spending attribute?
+# TODO: combined spending attribute? fx: combined = np.sum(spending, axis=1)
 # Fillna: #  TODO: remove nan instead?
 df["RoomService"] = df["RoomService"].fillna(0)
 df["FoodCourt"] = df["FoodCourt"].fillna(0)
@@ -77,11 +80,11 @@ df["Spa"] = df["Spa"].fillna(0)
 df["VRDeck"] = df["VRDeck"].fillna(0)
 
 # Min-Max scale spending attributes:
-df["RoomService"] = mm_scale_column(df, "RoomService")
-df["FoodCourt"] = mm_scale_column(df, "FoodCourt")
-df["ShoppingMall"] = mm_scale_column(df, "ShoppingMall")
-df["Spa"] = mm_scale_column(df, "Spa")
-df["VRDeck"] = mm_scale_column(df, "VRDeck")
+df["RoomService"] = scale_column(df, "RoomService")
+df["FoodCourt"] = scale_column(df, "FoodCourt")
+df["ShoppingMall"] = scale_column(df, "ShoppingMall")
+df["Spa"] = scale_column(df, "Spa")
+df["VRDeck"] = scale_column(df, "VRDeck")
 
 # RoomService
 # FoodCourt
