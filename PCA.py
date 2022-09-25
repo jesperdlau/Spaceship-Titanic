@@ -31,3 +31,9 @@ plt.xlabel('Components')
 plt.show()
 
 
+# TODO: Data projected onto PCA
+
+
+
+# TODO: Plot of data projected onto PCA
+

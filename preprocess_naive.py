@@ -71,7 +71,6 @@ df["VIP"] = df["VIP"].astype(int)
 
 
 # The following 5 attributes account for spending
-# TODO: combined spending attribute? fx: combined = np.sum(spending, axis=1)
 # Fillna: #  TODO: remove nan instead?
 df["RoomService"] = df["RoomService"].fillna(0)
 df["FoodCourt"] = df["FoodCourt"].fillna(0)
@@ -79,12 +78,16 @@ df["ShoppingMall"] = df["ShoppingMall"].fillna(0)
 df["Spa"] = df["Spa"].fillna(0)
 df["VRDeck"] = df["VRDeck"].fillna(0)
 
-# Min-Max scale spending attributes:
-df["RoomService"] = scale_column(df, "RoomService")
-df["FoodCourt"] = scale_column(df, "FoodCourt")
-df["ShoppingMall"] = scale_column(df, "ShoppingMall")
-df["Spa"] = scale_column(df, "Spa")
-df["VRDeck"] = scale_column(df, "VRDeck")
+# Insert new TotalSpending attribute
+TotalSpending = df.iloc[:,9:14].sum(axis=1)
+df.insert(15, column="TotalSpending", value=TotalSpending)
+
+# Scale spending attributes:
+# df["RoomService"] = scale_column(df, "RoomService")
+# df["FoodCourt"] = scale_column(df, "FoodCourt")
+# df["ShoppingMall"] = scale_column(df, "ShoppingMall")
+# df["Spa"] = scale_column(df, "Spa")
+# df["VRDeck"] = scale_column(df, "VRDeck")
 
 # RoomService
 # FoodCourt
