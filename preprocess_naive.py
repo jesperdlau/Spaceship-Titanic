@@ -7,13 +7,18 @@ from sklearn import preprocessing
 
 # TODO: Brug først StandardScaler(). Senere Min-Max, når der skal laves ML. Eller hvad?
 scalar = preprocessing.StandardScaler()
-#scalar = preprocessing.MinMaxScaler()
+# scalar = preprocessing.MinMaxScaler()
+# scalar = preprocessing.Normalizer()
+# scalar = False
 
 def scale_column(df, col):
-    col_np = df[col].to_numpy()
-    col_list = [[val] for val in col_np]
-    col_scaled = scalar.fit_transform(col_list)
-    return col_scaled
+    if scalar:
+        col_np = df[col].to_numpy()
+        col_list = [[val] for val in col_np]
+        col_scaled = scalar.fit_transform(col_list)
+        return col_scaled
+    else:
+        return col
 
 
 # Input data csv
@@ -83,11 +88,11 @@ TotalSpending = df.iloc[:,9:14].sum(axis=1)
 df.insert(15, column="TotalSpending", value=TotalSpending)
 
 # Scale spending attributes:
-# df["RoomService"] = scale_column(df, "RoomService")
-# df["FoodCourt"] = scale_column(df, "FoodCourt")
-# df["ShoppingMall"] = scale_column(df, "ShoppingMall")
-# df["Spa"] = scale_column(df, "Spa")
-# df["VRDeck"] = scale_column(df, "VRDeck")
+df["RoomService"] = scale_column(df, "RoomService")
+df["FoodCourt"] = scale_column(df, "FoodCourt")
+df["ShoppingMall"] = scale_column(df, "ShoppingMall")
+df["Spa"] = scale_column(df, "Spa")
+df["VRDeck"] = scale_column(df, "VRDeck")
 
 # RoomService
 # FoodCourt
