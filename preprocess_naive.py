@@ -29,11 +29,11 @@ filename_train_abs = "/home/jesper/Documents/MachineLearning/Spaceship-Titanic/D
 df = pd.read_csv(filename_train_abs)
 
 # PassengerId
-# TODO: Ignore for now. Be aware of column indexing when undeleting
+# TODO OK Ignore for now. Be aware of column indexing when undeleting
 del df["PassengerId"]
 
 # HomePlanet
-# TODO: Beslut om homeplanets skal være en 3d array eller 3 kollonner
+# TODO OK Beslut om homeplanets skal være en 3d array eller 3 kollonner. Bliver som det er. 
 
 y = pd.get_dummies(df["HomePlanet"], prefix="HomePlanet")
 del df["HomePlanet"]
@@ -43,8 +43,8 @@ df.insert(1, column="Home_Europa", value=y["HomePlanet_Europa"])
 df.insert(2, column="Home_Mars", value=y["HomePlanet_Mars"])
 
 # CryoSleep 
-# Fills nan as 0
-df["CryoSleep"] = df["CryoSleep"].fillna(0)
+# Removes nan because we have enough data
+df.dropna(subset=["CryoSleep"], inplace=True)
 df["CryoSleep"] = df["CryoSleep"].astype(int)
 
 # Cabin 
@@ -63,10 +63,11 @@ df.insert(5, column="Dest_TRAPPIST", value=h["Dest_PSO J318.5-22"])
 df.insert(6, column="Dest_PSO", value=h["Dest_TRAPPIST-1e"])
 
 # Age
-# Min-Max scaling of age. 
+# Scaling of age. 
 # TODO: problem with outliers and When test data has different range than train data! 
+# One solution. Age above 100 is set to 1. Otherwise set to age*0.01
 df.dropna(subset=["Age"], inplace=True)
-df["Age"] = scale_column(df, "Age")
+#df["Age"] = df["Age"] TODO:
 
 # VIP
 # Fills nan to False/0 because they account for the vast majority
@@ -76,18 +77,19 @@ df["VIP"] = df["VIP"].astype(int)
 
 
 # The following 5 attributes account for spending
-# Fillna: #  TODO: remove nan instead?
-df["RoomService"] = df["RoomService"].fillna(0)
-df["FoodCourt"] = df["FoodCourt"].fillna(0)
-df["ShoppingMall"] = df["ShoppingMall"].fillna(0)
-df["Spa"] = df["Spa"].fillna(0)
-df["VRDeck"] = df["VRDeck"].fillna(0)
+# Fillna: #  TODO OK Fill with average for column. 
+df["RoomService"] = df["RoomService"].fillna(df["RoomService"].mean())
+df["FoodCourt"] = df["FoodCourt"].fillna(df["FoodCourt"].mean())
+df["ShoppingMall"] = df["ShoppingMall"].fillna(df["ShoppingMall"].mean())
+df["Spa"] = df["Spa"].fillna(df["Spa"].mean())
+df["VRDeck"] = df["VRDeck"].fillna(df["VRDeck"].mean())
 
 # Insert new TotalSpending attribute
-TotalSpending = df.iloc[:,9:14].sum(axis=1)
+TotalSpending = df.loc[:,"RoomService":"VRDeck"].sum(axis=1)
 df.insert(15, column="TotalSpending", value=TotalSpending)
 
 # Scale spending attributes:
+# TODO: Remove scaling here. Make new scaling function later in pipe. 
 df["RoomService"] = scale_column(df, "RoomService")
 df["FoodCourt"] = scale_column(df, "FoodCourt")
 df["ShoppingMall"] = scale_column(df, "ShoppingMall")
@@ -117,6 +119,6 @@ if __name__ == "__main__":
     print(df.iloc[:,10:])
     print(f"\n        Isna: \n{df.isna().any()}")
     print(f"\n        Dtypes: \n{df.dtypes}")
-
-
+    print(df["TotalSpending"].where(df["TotalSpending"]==0).count())
+    print(df["VIP"].where(df["VIP"]==1).count())
 
