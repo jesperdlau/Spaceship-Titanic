@@ -26,7 +26,7 @@ filename_train = "Spaceship-Titanic/Data/train.csv"
 filename_train_abs = "/home/jesper/Documents/MachineLearning/Spaceship-Titanic/Data/train.csv"
 # filename_test = "./Data/test.csv"
 
-df = pd.read_csv(filename_train_abs)
+df = pd.read_csv(filename_train)
 
 # PassengerId
 # TODO OK Ignore for now. Be aware of column indexing when undeleting
