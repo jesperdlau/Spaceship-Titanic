@@ -89,12 +89,12 @@ TotalSpending = df.loc[:,"RoomService":"VRDeck"].sum(axis=1)
 df.insert(15, column="TotalSpending", value=TotalSpending)
 
 # Scale spending attributes:
-# TODO: Remove scaling here. Make new scaling function later in pipe. 
-df["RoomService"] = scale_column(df, "RoomService")
-df["FoodCourt"] = scale_column(df, "FoodCourt")
-df["ShoppingMall"] = scale_column(df, "ShoppingMall")
-df["Spa"] = scale_column(df, "Spa")
-df["VRDeck"] = scale_column(df, "VRDeck")
+# TODO: Remove scaling here. Make new scaling function later in another document. 
+# df["RoomService"] = scale_column(df, "RoomService")
+# df["FoodCourt"] = scale_column(df, "FoodCourt")
+# df["ShoppingMall"] = scale_column(df, "ShoppingMall")
+# df["Spa"] = scale_column(df, "Spa")
+# df["VRDeck"] = scale_column(df, "VRDeck")
 
 # RoomService
 # FoodCourt
