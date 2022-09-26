@@ -7,7 +7,7 @@ import seaborn as sns
 from preprocess_naive import df
 
 # Define the spending columns from the importet df
-spending = df.iloc[:,9:14]
+spending = df.loc[:,"RoomService":"VRDeck"]
 
 # df["RoomService"]
 # df["FoodCourt"]
@@ -38,24 +38,24 @@ corr = spending.corr()
 # plt.title("Covariance Matrix")
 # plt.show()
 #
-# sns.heatmap(corr, 
-#             xticklabels=corr.columns.values,
-#             yticklabels=corr.columns.values)
-# plt.title("Covariance Matrix")
-# plt.show()
-
-
-# Plot CIP against TotalSpending with Seaborn boxplot/violinplot
-figure, axs = plt.subplots(1, 2, figsize=(6, 12))
-axs[0].set_yscale("log")
-axs[1].set_yscale("log")
-figure.suptitle("VIP against TotalSpending - Logarithmic y-axis")
-axs[0].set_title("Boxplot")
-axs[1].set_title("Violinplot")
-
-sns.boxplot(ax=axs[0], data=df, x="VIP", y="TotalSpending")
-sns.violinplot(ax=axs[1], data=df, x="VIP", y="TotalSpending")
+sns.heatmap(corr, 
+            xticklabels=corr.columns.values,
+            yticklabels=corr.columns.values)
+plt.title("Correlation Matrix")
 plt.show()
+
+
+# Plot VIP against TotalSpending with Seaborn boxplot/violinplot
+# figure, axs = plt.subplots(1, 2, figsize=(6, 12))
+# axs[0].set_yscale("log")
+# axs[1].set_yscale("log")
+# figure.suptitle("VIP against TotalSpending - Logarithmic y-axis")
+# axs[0].set_title("Boxplot")
+# axs[1].set_title("Violinplot")
+
+# sns.boxplot(ax=axs[0], data=df, x="VIP", y="TotalSpending")
+# sns.violinplot(ax=axs[1], data=df, x="VIP", y="TotalSpending")
+# plt.show()
 
 
 # Plot VIP agains 4 spending
@@ -66,8 +66,18 @@ plt.show()
 # axs[1,1].scatter(df["VIP"], df["VRDeck"])
 # plt.show()
 
-# TODO: Plot Seaborn Pairplot
-
+# Plot Seaborn Pairplot
+# Is slow! ... and doesn't tell much. 
+# TODO: Try different scalings for more informative pairplot. 
+# sns.pairplot(data=df, 
+#             x_vars=["RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck"], 
+#             y_vars=["RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck"], 
+#             hue="VIP",
+#             kind="kde",
+#             #kind="heat",
+#             )
+# plt.title("Pair Plot")
+# plt.show()
 
 
 # df["RoomService"]
