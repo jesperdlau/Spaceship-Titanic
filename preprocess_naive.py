@@ -1,24 +1,7 @@
 # Import 
-# import numpy as np
+import numpy as np
 import pandas as pd
 from sklearn import preprocessing
-
-# Helping functions
-
-# TODO: Brug først StandardScaler(). Senere Min-Max, når der skal laves ML. Eller hvad?
-scalar = preprocessing.StandardScaler()
-# scalar = preprocessing.MinMaxScaler()
-# scalar = preprocessing.Normalizer()
-# scalar = False
-
-def scale_column(df, col):
-    if scalar:
-        col_np = df[col].to_numpy()
-        col_list = [[val] for val in col_np]
-        col_scaled = scalar.fit_transform(col_list)
-        return col_scaled
-    else:
-        return col
 
 
 # Input data csv
@@ -26,6 +9,7 @@ filename_train = "Spaceship-Titanic/Data/train.csv"
 filename_train_abs = "/home/jesper/Documents/MachineLearning/Spaceship-Titanic/Data/train.csv"
 # filename_test = "./Data/test.csv"
 
+# DataFrame
 df = pd.read_csv(filename_train)
 
 # PassengerId
@@ -64,10 +48,10 @@ df.insert(6, column="Dest_PSO", value=h["Dest_TRAPPIST-1e"])
 
 # Age
 # Scaling of age. 
-# TODO: problem with outliers and When test data has different range than train data! 
+# TODO: Is is still better to use min-max scaling? To preserve som range.. 
 # One solution. Age above 100 is set to 1. Otherwise set to age*0.01
 df.dropna(subset=["Age"], inplace=True)
-#df["Age"] = df["Age"] TODO:
+df["Age"] = df["Age"].apply(lambda x: 0.01*x if x <= 100 else 1.)
 
 # VIP
 # Fills nan to False/0 because they account for the vast majority
@@ -87,21 +71,6 @@ df["VRDeck"] = df["VRDeck"].fillna(df["VRDeck"].mean())
 # Insert new TotalSpending attribute
 TotalSpending = df.loc[:,"RoomService":"VRDeck"].sum(axis=1)
 df.insert(15, column="TotalSpending", value=TotalSpending)
-
-# Scale spending attributes:
-# TODO: Remove scaling here. Make new scaling function later in another document. 
-# df["RoomService"] = scale_column(df, "RoomService")
-# df["FoodCourt"] = scale_column(df, "FoodCourt")
-# df["ShoppingMall"] = scale_column(df, "ShoppingMall")
-# df["Spa"] = scale_column(df, "Spa")
-# df["VRDeck"] = scale_column(df, "VRDeck")
-
-# RoomService
-# FoodCourt
-# ShoppingMall
-# Spa
-# VRDeck
-
 
 # Name
 # Ignore name for now.
