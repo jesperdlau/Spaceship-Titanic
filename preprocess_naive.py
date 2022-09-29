@@ -51,7 +51,8 @@ df.insert(6, column="Dest_PSO", value=h["Dest_TRAPPIST-1e"])
 # TODO: Is is still better to use min-max scaling? To preserve som range.. 
 # One solution. Age above 100 is set to 1. Otherwise set to age*0.01
 df.dropna(subset=["Age"], inplace=True)
-df["Age"] = df["Age"].apply(lambda x: 0.01*x if x <= 100 else 1.)
+# TODO: Scaling is now removed here in preprocess. Scaling can later be done when neccesary, just like spending. 
+#df["Age"] = df["Age"].apply(lambda x: 0.01*x if x <= 100 else 1.)
 
 # VIP
 # Fills nan to False/0 because they account for the vast majority
@@ -82,12 +83,14 @@ df["Transported"] = df["Transported"].astype(int)
 
 
 if __name__ == "__main__":
-    print(df.describe(include="all"))
+    #print(df.describe(include="all"))
+    print(df.iloc[:,:8].describe(include="all"))
+    print(df.iloc[:,9:].describe(include="all"))
     print(df.iloc[:,:5])
     print(df.iloc[:,5:10])
     print(df.iloc[:,10:])
-    print(f"\n        Isna: \n{df.isna().any()}")
-    print(f"\n        Dtypes: \n{df.dtypes}")
-    print(df["TotalSpending"].where(df["TotalSpending"]==0).count())
-    print(df["VIP"].where(df["VIP"]==1).count())
+    # print(f"\n        Isna: \n{df.isna().any()}")
+    # print(f"\n        Dtypes: \n{df.dtypes}")
+    # print(df["TotalSpending"].where(df["TotalSpending"]==0).count())
+    # print(df["VIP"].where(df["VIP"]==1).count())
 
