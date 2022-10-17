@@ -81,16 +81,17 @@ del df["Name"]
 # Transported (Label)
 df["Transported"] = df["Transported"].astype(int)
 
-
 if __name__ == "__main__":
     #print(df.describe(include="all"))
-    print(df.iloc[:,:8].describe(include="all"))
-    print(df.iloc[:,9:].describe(include="all"))
-    print(df.iloc[:,:5])
-    print(df.iloc[:,5:10])
-    print(df.iloc[:,10:])
+    # print(df.iloc[:,:8].describe(include="all"))
+    # print(df.iloc[:,9:].describe(include="all"))
+    # print(df.iloc[:,:5])
+    # print(df.iloc[:,5:10])
+    # print(df.iloc[:,10:])
     # print(f"\n        Isna: \n{df.isna().any()}")
     # print(f"\n        Dtypes: \n{df.dtypes}")
     # print(df["TotalSpending"].where(df["TotalSpending"]==0).count())
     # print(df["VIP"].where(df["VIP"]==1).count())
+    print(df.iloc[0:2,-1].values)
+    print(df.iloc[0:2,:-1].values)
 

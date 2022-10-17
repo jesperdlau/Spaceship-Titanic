@@ -2,12 +2,8 @@
 import numpy as np
 import pandas as pd
 from sklearn import preprocessing
-from preprocess_naive import df
+from preprocess import df
 
-
-std_scale = preprocessing.StandardScaler()
-mm_scale = preprocessing.MinMaxScaler()
-normalize = preprocessing.Normalizer()
 
 # The most cursed way to scale a column, because for reasons, simply to scaler.transform(df) doesn't work in our case. 
 def scale_col(col_train, col_target, scaler):
@@ -40,6 +36,10 @@ def scale_df(df_train, df_target, scaler):
     return df_scaled
 
 if __name__ == "__main__":
+    std_scale = preprocessing.StandardScaler()
+    mm_scale = preprocessing.MinMaxScaler()
+    normalize = preprocessing.Normalizer()  
+    
     spending = df.loc[:,"RoomService":"TotalSpending"]
     spending_scaled = scale_df(spending, spending, mm_scale)
     print(spending_scaled)
