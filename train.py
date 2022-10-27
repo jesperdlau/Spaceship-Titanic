@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import torch
 import torch.nn as nn
+import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
@@ -16,8 +17,8 @@ from utilities import scale_df
 # Hyperparameters 
 test_size= 0.25
 random_state= 42
-batch_size = 2
-lr = 1e-3
+batch_size = 5
+lr = 1e-4
 epochs = 10
 
 # Prepare data
@@ -49,7 +50,7 @@ optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 def train(dataloader, model, loss_fn, optimizer):
     size = len(dataloader.dataset)
     model.train()
-    for batch, (X, y) in enumerate(dataloader):
+    for batch_nr, (X, y) in enumerate(dataloader):
         X, y = X.to(device), y.unsqueeze(1).to(device)
 
         # Compute prediction error
@@ -61,8 +62,9 @@ def train(dataloader, model, loss_fn, optimizer):
         loss.backward()
         optimizer.step()
 
-        if batch % 100 == 0:
-            loss, current = loss.item(), batch * len(X)
+        # Print info for batch
+        if batch_nr % 100 == 0:
+            loss, current = loss.item(), batch_nr * len(X)
             print(f"loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
 
 
@@ -81,14 +83,26 @@ def test(dataloader, model, loss_fn):
 
             test_loss += loss_fn(pred, y).item()
             correct += (pred_bin == y).type(torch.float).sum().item()
-    test_loss /= num_batches
-    correct /= size
-    print(f"Test Error: \n Accuracy: {(100*correct):>0.1f}%, Avg loss: {test_loss:>8f} \n")
-
+    avg_loss = test_loss/num_batches
+    accuracy = correct/size
+    #print(f"Test Error: \n Accuracy: {(100*accuracy):>0.1f}%, Avg loss: {avg_loss:>8f} \n")
+    return accuracy, avg_loss
 
 if __name__ == "__main__":
+    acc_list = []
+    loss_list = []
     for t in range(epochs):
-        print(f"Epoch {t+1}\n-------------------------------")
+        
         train(dataloader_train, model, loss_fn, optimizer)
-        test(dataloader_test, model, loss_fn)
+        accuracy, avg_loss = test(dataloader_test, model, loss_fn)
+
+        acc_list.append(accuracy)
+        loss_list.append(avg_loss)
+
+        print(f"Epoch {t+1}\n-------------------------------")
+        print(f"Test Error: \nAccuracy: {(100*accuracy):>0.1f}%, Avg loss: {avg_loss:>8f} \n")
+
     print("Done!")
+    plt.plot(acc_list)
+    plt.ylim((0,1))
+    plt.show()
