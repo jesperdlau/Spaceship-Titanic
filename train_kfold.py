@@ -11,22 +11,26 @@ from sklearn import preprocessing
 
 # Import from other files
 from data_loader import SpaceshipDataset
-from preprocess import df
+# from preprocess import df
 from utilities import scale_df
 from model import NeuralNetwork
 
 
 # Hyperparameters 
-test_size= 0.25
-random_state= 42
+# test_size= 0.25
+# random_state= 42
 batch_size = 5
 lr = 1e-4
-epochs = 5
+epochs = 20
 k_folds = 5
 scaler = preprocessing.MinMaxScaler()
+csv_input_train = "Spaceship-Titanic/Data/train_preprocessed.csv"
+
 
 # Prepare data
 # Scale data here instead of preprocess as data may be used with other scalars in other parts of the project. 
+df = pd.read_csv(csv_input_train)
+del df["PassengerId"]
 df_scaled = scale_df(df, df, scaler)
 data = SpaceshipDataset(df_scaled)
 # df_train, df_test = train_test_split(df_scaled, test_size=test_size, random_state=random_state)
