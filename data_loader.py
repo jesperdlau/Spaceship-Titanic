@@ -22,6 +22,17 @@ class SpaceshipDataset(Dataset):
     def __getitem__(self, idx):
         return self.X[idx], self.Y[idx]
 
+class EvalLoader(Dataset):
+    def __init__(self, dataframe):
+        x = dataframe.iloc[:,:].values
+        self.X=torch.tensor(x, dtype=torch.float32)
+        
+    def __len__(self):
+        return len(self.X[:,0])
+        
+    def __getitem__(self, idx):
+        return self.X[idx]
+
 
 if __name__ == "__main__":
     from preprocess import df
