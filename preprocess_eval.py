@@ -96,7 +96,7 @@ except:
     pass
 
 # Save df
-df.to_csv(csv_out)
+df.to_csv(csv_out, index=False)
 
 if __name__ == "__main__":
     #print(df.describe(include="all"))

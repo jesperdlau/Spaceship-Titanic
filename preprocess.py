@@ -6,11 +6,11 @@ import pandas as pd
 # csv_out = input()
 
 # Input data csv
-# csv_in = "Spaceship-Titanic/Data/train.csv"
-csv_in = "Spaceship-Titanic/Data/test.csv"
+csv_in = "Spaceship-Titanic/Data/train.csv"
+# csv_in = "Spaceship-Titanic/Data/test.csv"
 
-# csv_out = "Spaceship-Titanic/Data/train_preprocessed.csv"
-csv_out = "Spaceship-Titanic/Data/eval_preprocessed.csv"
+csv_out = "Spaceship-Titanic/Data/train_preprocessed.csv"
+# csv_out = "Spaceship-Titanic/Data/eval_preprocessed.csv"
 
 
 # DataFrame
@@ -89,7 +89,7 @@ except:
     pass
 
 # Save df
-df.to_csv(csv_out)
+df.to_csv(csv_out, index=False)
 
 if __name__ == "__main__":
     #print(df.describe(include="all"))
