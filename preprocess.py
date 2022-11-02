@@ -2,19 +2,23 @@
 import pandas as pd
 
 # Input/Output
-csv_in = input()
-df_out = input()
+# csv_in = input()
+# csv_out = input()
 
 # Input data csv
-# if __name__ == "__main__":
-#     csv_in = "Spaceship-Titanic/Data/train.csv"
+# csv_in = "Spaceship-Titanic/Data/train.csv"
+csv_in = "Spaceship-Titanic/Data/test.csv"
+
+# csv_out = "Spaceship-Titanic/Data/train_preprocessed.csv"
+csv_out = "Spaceship-Titanic/Data/eval_preprocessed.csv"
+
 
 # DataFrame
 df = pd.read_csv(csv_in)
 
 # PassengerId
 # TODO OK Ignore for now. Be aware of column indexing when undeleting
-del df["PassengerId"]
+# del df["PassengerId"]
 
 # HomePlanet
 # TODO OK Beslut om homeplanets skal være en 3d array eller 3 kollonner. Bliver som det er. 
@@ -85,19 +89,19 @@ except:
     pass
 
 # Save df
-df.save(df_out)
+df.to_csv(csv_out)
 
 if __name__ == "__main__":
     #print(df.describe(include="all"))
     # print(df.iloc[:,:8].describe(include="all"))
     # print(df.iloc[:,9:].describe(include="all"))
-    # print(df.iloc[:,:5])
+    print(df.iloc[:,:5])
     # print(df.iloc[:,5:10])
     # print(df.iloc[:,10:])
     # print(f"\n        Isna: \n{df.isna().any()}")
     # print(f"\n        Dtypes: \n{df.dtypes}")
     # print(df["TotalSpending"].where(df["TotalSpending"]==0).count())
     # print(df["VIP"].where(df["VIP"]==1).count())
-    print(df.iloc[0:2,-1].values)
-    print(df.iloc[0:2,:-1].values)
-
+    #print(df.iloc[0:2,-1].values)
+    #print(df.iloc[0:2,:-1].values)
+    print(f"Preprocess done")
