@@ -21,7 +21,7 @@ test_size= 0.25
 random_state= 42
 batch_size = 5
 lr = 1e-4
-epochs = 20
+epochs = 5
 k_folds = 5
 scaler = preprocessing.MinMaxScaler()
 
@@ -98,6 +98,7 @@ fold_test_acc_list = []
 fold_train_loss_list = []
 fold_test_loss_list = []
 
+fold_test_best_acc = []
 # Modified dataloader with k-fold
 
 kfold = KFold(n_splits=k_folds, shuffle=True)
@@ -161,6 +162,7 @@ for fold, (train_id, test_id) in enumerate(kfold.split(df_scaled)):
     fold_test_acc_list.append(test_acc_list)
     fold_train_loss_list.append(train_loss_list)
     fold_test_loss_list.append(test_loss_list)
+    fold_test_best_acc.append(fold_acc)
 
     print(f"Fold {fold} - Done! Best accuracy: {fold_acc}")
 
@@ -170,6 +172,7 @@ print(f"###################################\nAll done!")
 ## Plot test loss and acc for each fold
 legend_list = []
 for n in range(k_folds):
+    print(f"Fold {n}: {fold_test_best_acc[n]}")
     plt.plot(fold_test_acc_list[n])
     plt.plot(fold_test_loss_list[n], "--")
     #plt.plot(fold_train_acc_list[n], "-.")
