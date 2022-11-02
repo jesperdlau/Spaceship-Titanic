@@ -1,16 +1,16 @@
 # Import 
-import numpy as np
 import pandas as pd
-from sklearn import preprocessing
 
+# Input/Output
+csv_in = input()
+df_out = input()
 
 # Input data csv
-filename_train = "Spaceship-Titanic/Data/train.csv"
-filename_train_abs = "/home/jesper/Documents/MachineLearning/Spaceship-Titanic/Data/train.csv"
-# filename_test = "./Data/test.csv"
+# if __name__ == "__main__":
+#     csv_in = "Spaceship-Titanic/Data/train.csv"
 
 # DataFrame
-df = pd.read_csv(filename_train)
+df = pd.read_csv(csv_in)
 
 # PassengerId
 # TODO OK Ignore for now. Be aware of column indexing when undeleting
@@ -22,9 +22,9 @@ del df["PassengerId"]
 y = pd.get_dummies(df["HomePlanet"], prefix="HomePlanet")
 del df["HomePlanet"]
 
-df.insert(0, column="Home_Earth", value=y["HomePlanet_Earth"])
-df.insert(1, column="Home_Europa", value=y["HomePlanet_Europa"])
-df.insert(2, column="Home_Mars", value=y["HomePlanet_Mars"])
+df.insert(1, column="Home_Earth", value=y["HomePlanet_Earth"])
+df.insert(2, column="Home_Europa", value=y["HomePlanet_Europa"])
+df.insert(3, column="Home_Mars", value=y["HomePlanet_Mars"])
 
 # CryoSleep 
 # Removes nan because we have enough data
@@ -42,9 +42,9 @@ df.dropna(subset=["Destination"], inplace=True)
 h = pd.get_dummies(df["Destination"], prefix="Dest")
 del df["Destination"]
 
-df.insert(4, column="Dest_Cancri", value=h["Dest_55 Cancri e"])
-df.insert(5, column="Dest_TRAPPIST", value=h["Dest_PSO J318.5-22"])
-df.insert(6, column="Dest_PSO", value=h["Dest_TRAPPIST-1e"])
+df.insert(5, column="Dest_Cancri", value=h["Dest_55 Cancri e"])
+df.insert(6, column="Dest_TRAPPIST", value=h["Dest_PSO J318.5-22"])
+df.insert(7, column="Dest_PSO", value=h["Dest_TRAPPIST-1e"])
 
 # Age
 # Scaling of age. 
@@ -70,8 +70,8 @@ df["Spa"] = df["Spa"].fillna(df["Spa"].mean())
 df["VRDeck"] = df["VRDeck"].fillna(df["VRDeck"].mean())
 
 # Insert new TotalSpending attribute
-TotalSpending = df.loc[:,"RoomService":"VRDeck"].sum(axis=1)
-df.insert(15, column="TotalSpending", value=TotalSpending)
+# TotalSpending = df.loc[:,"RoomService":"VRDeck"].sum(axis=1)
+# df.insert(16, column="TotalSpending", value=TotalSpending)
 
 # Name
 # Ignore name for now.
@@ -79,7 +79,13 @@ df.insert(15, column="TotalSpending", value=TotalSpending)
 del df["Name"]
 
 # Transported (Label)
-df["Transported"] = df["Transported"].astype(int)
+try:
+    df["Transported"] = df["Transported"].astype(int)
+except:
+    pass
+
+# Save df
+df.save(df_out)
 
 if __name__ == "__main__":
     #print(df.describe(include="all"))
