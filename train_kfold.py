@@ -6,7 +6,7 @@ import torch.nn as nn
 import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader, SubsetRandomSampler
 from sklearn.model_selection import train_test_split, KFold
-from sklearn import preprocessing
+from sklearn.preprocessing import MinMaxScaler
 
 
 # Import from other files
@@ -23,7 +23,7 @@ batch_size = 5
 lr = 1e-4
 epochs = 20
 k_folds = 5
-scaler = preprocessing.MinMaxScaler()
+scaler = MinMaxScaler()
 csv_input_train = "Spaceship-Titanic/Data/train_preprocessed.csv"
 
 
