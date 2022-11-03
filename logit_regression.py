@@ -9,6 +9,9 @@ from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.preprocessing import MinMaxScaler
 from utilities import scale_df
 
+# Hyperparameters
+pred_out_path = "logits_prediction.csv"
+test_size = 0.2
 
 # Prepare data
 csv_input_train = "Spaceship-Titanic/Data/train_preprocessed.csv"
@@ -17,7 +20,7 @@ df_train = pd.read_csv(csv_input_train)
 df_eval = pd.read_csv(csv_input_eval)
 
 # Data split
-df_train, df_test = train_test_split(df_train, test_size=0.2)
+df_train, df_test = train_test_split(df_train, test_size=test_size)
 X_train = df_train.iloc[:,1:-1]
 y_train = df_train.iloc[:,-1]
 X_test = df_test.iloc[:,1:-1]
@@ -51,4 +54,12 @@ acc = log_reg.score(X_train, y_train)
 # Print output
 print(f"Accuracy: {acc}")
 print(f"{pred_true.iloc[:10,:]}")
+
+
+pred_bool = [bool(pred) for pred in pred_eval]
+pred_df = pd.DataFrame({"PassengerId": df_eval.iloc[:,0].values, "Transported": pred_bool})
+
+# Save to csv
+pred_df.to_csv(pred_out_path, index=False)
+print("Done")
 
