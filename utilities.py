@@ -35,6 +35,24 @@ def scale_df(df_train, df_target, scaler):
     df_scaled = pd.DataFrame(data=df_scaled, columns=df_train.columns)
     return df_scaled
 
+
+def inverse_scale_df(df_train, df_target, scaler):
+    df_scaled = []
+    for col in df_train:
+        col_train = df_train[col].to_numpy()
+        col_train = [[val] for val in col_train]
+        scaler.fit(col_train)
+        col_target = df_target[col].to_numpy()
+        col_target = [[val] for val in col_target]
+        col_scaled = scaler.inverse_transform(col_target)
+        df_scaled.append(col_scaled)
+    df_scaled = np.array(df_scaled)
+    df_scaled = df_scaled.T
+    df_scaled = df_scaled.reshape(-1, df_scaled.shape[-1])
+    df_scaled = pd.DataFrame(data=df_scaled, columns=df_train.columns)
+    return df_scaled
+
+
 if __name__ == "__main__":
     std_scale = preprocessing.StandardScaler()
     mm_scale = preprocessing.MinMaxScaler()
