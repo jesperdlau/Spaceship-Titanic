@@ -4,7 +4,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from sklearn.metrics import mean_squared_error, r2_score
+from utilities import scale_df, inverse_scale_df, scale_col
+
 
 # Prepare data
 csv_input_train = "Spaceship-Titanic/Data/train_preprocessed.csv"
@@ -18,6 +21,14 @@ X_train = df_train.loc[:,"RoomService":"Spa"]
 y_train = df_train.loc[:,"VRDeck"]
 X_eval = df_eval.loc[:,"RoomService":"Spa"]
 y_eval = df_eval.loc[:,"VRDeck"]
+
+# Scaling 
+scaler = StandardScaler()
+# scaler = MinMaxScaler()
+X_eval = scale_df(X_train, X_eval, scaler)
+X_train = scale_df(X_train, X_train, scaler)
+y_eval = scale_col(y_train, y_eval, scaler)
+y_train = scale_col(y_train, y_train, scaler)
 
 # Linear Regression
 lin_reg = LinearRegression(fit_intercept=True).fit(X_train, y_train)
