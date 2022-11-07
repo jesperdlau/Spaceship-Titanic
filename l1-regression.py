@@ -63,7 +63,7 @@ r2_train_list = []
 MSE_eval_list = []
 r2_eval_list = []
 
-for l in np.arange(0, 0.5, 0.01):
+for l in np.arange(0, 0.1, 0.01):
     MSE_train, r2_train, MSE_eval, r2_eval, coef, intercept = l1_loop(l)
     MSE_train_list.append(MSE_train)
     r2_train_list.append(r2_train)
@@ -72,15 +72,21 @@ for l in np.arange(0, 0.5, 0.01):
     function = f"{l:.2f}: {intercept:.3f} + {coef[0]:.3f} + {coef[1]:.3f} + {coef[2]:.3f} + {coef[3]:.3f}"
     print(function)
 
-plt.plot(MSE_train_list, 'b--')
-#plt.plot(r2_train_list, 'r--')
-plt.plot(MSE_eval_list, 'b')
-#plt.plot(r2_eval_list, 'r')
+fig, (ax1, ax2) = plt.subplots(2,1)
+ax1.plot(MSE_train_list, 'b--')
+ax1.plot(MSE_eval_list, 'b')
+ax1.legend(["MSE_train", "MSE_eval"])
+ax1.set_title("L1 regression. Mean Square Error, lower is better")
+ax1.set_ylabel("Error")
+ax1.set_xlabel("Lambda")
 
-#plt.legend(["MSE_train", "r2_train", "MSE_eval", "r2_eval"])
-plt.title("L1 regression. \nMean Square Error, lower is better")
-plt.ylabel("Error")
-plt.xlabel("Lambda")
+ax2.plot(r2_train_list, 'r--')
+ax2.plot(r2_eval_list, 'r')
+ax2.legend(["r2_train", "r2_eval"])
+ax2.set_title("L1 regression. r2 score - Higher is better. 1.0 is perfect.")
+ax2.set_ylabel("Score")
+ax2.set_xlabel("Lambda")
+
 plt.show()
 
 
