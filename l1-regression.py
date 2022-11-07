@@ -62,17 +62,30 @@ MSE_train_list = []
 r2_train_list = []
 MSE_eval_list = []
 r2_eval_list = []
+weights = []
+intercepts = []
 
-for l in np.arange(0, 0.1, 0.01):
+for l in np.linspace(0, 0.3, 200):
     MSE_train, r2_train, MSE_eval, r2_eval, coef, intercept = l1_loop(l)
     MSE_train_list.append(MSE_train)
     r2_train_list.append(r2_train)
     MSE_eval_list.append(MSE_eval)
     r2_eval_list.append(r2_eval)
-    function = f"{l:.2f}: {intercept:.3f} + {coef[0]:.3f} + {coef[1]:.3f} + {coef[2]:.3f} + {coef[3]:.3f}"
-    print(function)
+    weights.append(coef)
+    intercepts.append(coef)
+    #function = f"{l:.2f}: {intercept:.3f} + {coef[0]:.3f} + {coef[1]:.3f} + {coef[2]:.3f} + {coef[3]:.3f}"
+    #print(function)
 
-fig, (ax1, ax2) = plt.subplots(2,1)
+
+fig, (ax0, ax1, ax2) = plt.subplots(3,1)
+
+# plot weights
+for w in range(4):
+    ax0.plot([wei[w] for wei in weights])
+    ax0.plot(intercepts[w])
+ax0.set_title("Weights")
+
+# Plot score/error
 ax1.plot(MSE_train_list, 'b--')
 ax1.plot(MSE_eval_list, 'b')
 ax1.legend(["MSE_train", "MSE_eval"])
