@@ -36,8 +36,8 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
 # Model
-from model import NeuralNetwork
-model = NeuralNetwork()
+from model import ClassificationModel
+model = ClassificationModel()
 
 # Loss function and Optimizer
 # Binary Cross Entropy is standard for binary classification
