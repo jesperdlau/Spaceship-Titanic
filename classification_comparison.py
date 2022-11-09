@@ -34,7 +34,6 @@ p21 = n21/n
 r_hat = n12/(n12 + n21)
 r = p12/(p12 + p21)
 
-
 print("n11,n12,n21,n22 = ", n11,n12,n21,n22)
 print("p12 = ",p12)
 print("p21 = ",p21)
@@ -51,7 +50,6 @@ print("P_value = ",p_value)
 
 theta_hat = (n12 - n21)/n
 print("Theta_hat = ",theta_hat)
-
 
 # Conf int --- McNemars
 E_theta = (n12-n21)/n
