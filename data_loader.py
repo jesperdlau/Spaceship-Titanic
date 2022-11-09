@@ -34,6 +34,19 @@ class EvalLoader(Dataset):
         return self.X[idx]
 
 
+class SpaceData(Dataset):
+    def __init__(self, x, y):
+        self.X=torch.tensor(x.values, dtype=torch.float32)
+        self.Y=torch.tensor(y.values, dtype=torch.float32)
+        
+    def __len__(self):
+        return len(self.Y)
+
+    def __getitem__(self, idx):
+        return self.X[idx], self.Y[idx]
+
+
+
 if __name__ == "__main__":
     from preprocess import df
     from torch.utils.data import DataLoader
