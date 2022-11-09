@@ -25,7 +25,7 @@ class RegressionModel(nn.Module):
     def __init__(self):
         super().__init__()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(4, 128),
+            nn.Linear(14, 128),
             nn.ReLU(),
             nn.Linear(128, 128),
             nn.ReLU(),
