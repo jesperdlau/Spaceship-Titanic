@@ -20,8 +20,10 @@ df_eval = pd.read_csv(csv_input_eval)
 # ["RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck"]]
 # Data split already provided
 X_train = df_train.loc[:,:"Spa"]
+#X_train = df_train.loc[:,"Home_Earth":"Spa"]
 y_train = df_train.loc[:,"VRDeck"]
 X_eval = df_eval.loc[:,:"Spa"]
+#X_eval = df_eval.loc[:,"Home_Earth":"Spa"]
 y_eval = df_eval.loc[:,"VRDeck"]
 
 
@@ -76,35 +78,36 @@ for l in np.linspace(0, 0.3, 200):
     #function = f"{l:.2f}: {intercept:.3f} + {coef[0]:.3f} + {coef[1]:.3f} + {coef[2]:.3f} + {coef[3]:.3f}"
     #print(function)
 
+print(f"Acc: {r2_eval_list[0]}")
 
-# fig, (ax1, ax2) = plt.subplots(2,1)
+fig, (ax1, ax2) = plt.subplots(2,1)
 
-# # Plot score/error
-# ax1.plot(MSE_train_list, 'b--')
-# ax1.plot(MSE_eval_list, 'b')
-# ax1.legend(["MSE_train", "MSE_eval"])
-# ax1.set_title("L1 regression. Mean Square Error, lower is better")
-# ax1.set_ylabel("Error")
-# ax1.set_xlabel("Lambda")
+# Plot score/error
+ax1.plot(MSE_train_list, 'b--')
+ax1.plot(MSE_eval_list, 'b')
+ax1.legend(["MSE_train", "MSE_eval"])
+ax1.set_title("L1 regression. Mean Square Error, lower is better")
+ax1.set_ylabel("Error")
+ax1.set_xlabel("Lambda")
 
-# ax2.plot(r2_train_list, 'r--')
-# ax2.plot(r2_eval_list, 'r')
-# ax2.legend(["r2_train", "r2_eval"])
-# ax2.set_title("L1 regression. r2 score - Higher is better. 1.0 is perfect.")
-# ax2.set_ylabel("Score")
-# ax2.set_xlabel("Lambda")
+ax2.plot(r2_train_list, 'r--')
+ax2.plot(r2_eval_list, 'r')
+ax2.legend(["r2_train", "r2_eval"])
+ax2.set_title("L1 regression. r2 score - Higher is better. 1.0 is perfect.")
+ax2.set_ylabel("Score")
+ax2.set_xlabel("Lambda")
 
-# plt.show()
-
-
-styles = ['r-','r--','r-.','g:','g.','g','g<','b-','b--','b-.','y:','y.','y','y<']
-for w in range(14):
-    plt.plot([wei[w] for wei in weights], styles[w], label=f"{df_train.columns[w]}")
-    #plt.plot(intercepts[w], styles[w], label=f"{df_train.columns[w]}")
-plt.title("Weights")
-plt.xticks(np.linspace(0, 200, 10), [f"{val:.2f}" for val in np.linspace(0, 0.3, 10)])
-plt.xlabel("Lambda")
-
-plt.legend()
 plt.show()
+
+
+# styles = ['r-','r--','r-.','g:','g.','g','g<','b-','b--','b-.','y:','y.','y','y<']
+# for w in range(13):
+#     plt.plot([wei[w] for wei in weights], styles[w], label=f"{df_train.columns[w]}")
+#     #plt.plot(intercepts[w], styles[w], label=f"{df_train.columns[w]}")
+# plt.title("Weights")
+# plt.xticks(np.linspace(0, 200, 10), [f"{val:.2f}" for val in np.linspace(0, 0.3, 10)])
+# plt.xlabel("Lambda")
+
+# plt.legend()
+# plt.show()
 
