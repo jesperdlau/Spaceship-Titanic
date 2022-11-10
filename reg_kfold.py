@@ -41,30 +41,19 @@ optimizer = Adam(model_ref.parameters(), lr=lr)
 
 
 # Prepare data
-df = pd.read_csv(source_path)
-#data = SpaceshipDataset(df)
-data = df
+data = pd.read_csv(source_path)
+# data = df
+dataset = SpaceshipDataset(data)
 
 # Outer layer - Important to not shuffle so we can reproduce the splits. The data is already shuffeled. 
 kfold = KFold(n_splits=k_folds, shuffle=False)
 for outer_layer, (train_id, test_id) in enumerate(kfold.split(data)):
 
-    sub_train = data.iloc[train_id]
-    sub_test = data.iloc[test_id]
 
     # Inner layer
-    for inner_layer, (train_id_inner, test_id_inner) in enumerate(kfold.split(sub_train)):
-        subsub_train = sub_train.iloc[train_id_inner]
-        subsub_test = sub_train.iloc[test_id_inner]
-        # train_sub_id = train_id[train_id_inner]
-        # subsub_train = data.iloc[train_id[train_id_inner]]
-        # subsub_test = data.iloc[test_id[train_id_inner]]
-
-        data_hyper = SpaceshipDataset(subsub_train)
-        # dataloader_train = DataLoader(SpaceshipDataset(subsub_train), batch_size=batch_size, sampler=train_id_inner, drop_last=True)
-        # dataloader_test = DataLoader(SpaceshipDataset(subsub_train), batch_size=batch_size, sampler=test_id_inner, drop_last=True)
-        dataloader_train = DataLoader(data_hyper, batch_size=batch_size, sampler=train_id_inner, drop_last=True)
-        dataloader_test = DataLoader(data_hyper, batch_size=batch_size, sampler=test_id_inner, drop_last=True)
+    for inner_layer, (train_id_inner, test_id_inner) in enumerate(kfold.split(train_id)):
+        dataloader_train = DataLoader(dataset, batch_size=batch_size, sampler=train_id_inner)
+        dataloader_test = DataLoader(dataset, batch_size=batch_size, sampler=test_id_inner)
 
 
         # Hyper parameter layer
@@ -72,12 +61,15 @@ for outer_layer, (train_id, test_id) in enumerate(kfold.split(data)):
             
             model = RegressionModelHyper1(hyper=hyper)
             best_hyper_state, best_hyper_loss = 0, 10
-
+            
             # Epochs of training
             for epoch in range(epochs):
-                print(f"[{outer_layer+1}/{k_folds}:{inner_layer+1}/{k_folds}:{hyper+1}/{hyper_range}:{epoch+1}/{epochs}]")
+                
                 model_state = train2(dataloader_train, model, loss_fn, optimizer)
                 test_loss = test2(dataloader_test, model, loss_fn)
+
+                print(f"[{outer_layer+1}/{k_folds}:{inner_layer+1}/{k_folds}:{hyper+1}/{hyper_range}:{epoch+1}/{epochs}]")
+
                 if test_loss < best_hyper_loss:
                     best_hyper_model, best_hyper_loss = model_state, test_loss
 
