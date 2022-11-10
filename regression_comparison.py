@@ -21,7 +21,6 @@ def ttest_twomodels(y_true, yhatA, yhatB, alpha=0.05, loss_norm_p=1):
 
 
 def pairwise_stats(label, model1, model2, model3,printStat = True):
-    result = [[] for _ in range(3)]
     
     mean12, CI12, p12 = ttest_twomodels(label, model1, model2)
     mean23, CI23, p23 = ttest_twomodels(label, model2, model3)
