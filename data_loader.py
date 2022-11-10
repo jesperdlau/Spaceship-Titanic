@@ -12,7 +12,6 @@ class SpaceshipDataset(Dataset):
     def __init__(self, dataframe):
         x = dataframe.iloc[:,:-1].values
         y = dataframe.iloc[:,-1].values
-
         self.X=torch.tensor(x, dtype=torch.float32)
         self.Y=torch.tensor(y, dtype=torch.float32)
         

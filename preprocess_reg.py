@@ -101,7 +101,7 @@ if __name__ == "__main__":
     #print(df.iloc[:,:5])
     # print(df.iloc[:,5:10])
     # print(df.iloc[:,10:])
-    #print(f"\n        Isna: \n{df.isna().any()}")
+    print(f"\n        Isna: \n{df.isna().any()}")
     #print(f"\n        Dtypes: \n{df.dtypes}")
     # print(df["TotalSpending"].where(df["TotalSpending"]==0).count())
     # print(df["VIP"].where(df["VIP"]==1).count())
