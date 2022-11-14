@@ -132,8 +132,9 @@ def train_class(dataloader, model, loss_fn, optimizer):
 
         # Compute prediction error
         pred = model(X)
+        loss = loss_fn(pred, y)
         pred_bin = torch.round(torch.sigmoid(pred))
-        loss = loss_fn(pred_bin, y)
+
 
         # Backpropagation
         optimizer.zero_grad()
@@ -160,7 +161,7 @@ def test_class(dataloader, model, loss_fn):
             pred_bin = torch.round(torch.sigmoid(pred))
             
             # Save loss
-            test_loss += loss_fn(pred_bin, y).item()
+            test_loss += loss_fn(pred, y).item()
             test_correct += (pred_bin == y).type(torch.float).sum().item()
             
     epoch_avg_loss = test_loss/len(dataloader)
@@ -183,8 +184,8 @@ def test_class_pred(dataloader, model, loss_fn):
             test_correct += (pred_bin == y).type(torch.float).sum().item()
             
             # Save prediction
-            pred = np.array([p.item() for p in pred])
-            pred_arr[i] = pred.item()
+            pred_bin_arr = np.array([p.item() for p in pred_bin])
+            pred_arr[i] = pred_bin_arr.item()
             
     epoch_avg_loss = test_loss/len(dataloader)
     test_acc = test_correct/len(dataloader.sampler)
