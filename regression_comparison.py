@@ -55,6 +55,34 @@ if __name__ == "__main__":
     # print("Confidence interval for the mean difference: ",CI)
     # print("P-value = ",p)
 
-    pairwise_stats(label,model1,model2,model3)
+    label_path = "Spaceship-Titanic/Data/y_test_reg.npy"
+    nn_pred_path = "Spaceship-Titanic/Data/nn_reg_pred.npy"
+    lin_pred_path = "Spaceship-Titanic/Data/linReg_pred.npy"
+    base_pred_path = "Spaceship-Titanic/Data/BaselineReg_pred.npy"
+
+    labels = np.load(label_path, allow_pickle=True)
+    base_pred = np.load(base_pred_path, allow_pickle=True)
+    lin_pred = np.load(lin_pred_path, allow_pickle=True)
+    nn_pred = np.load(nn_pred_path, allow_pickle=True)
+    
+    # # Cursed
+    # nn_pred = np.load(nn_pred_path, allow_pickle=True)
+    # nn_pred_sig = []
+    # for fold in range(5):
+    #     pred_arr = nn_pred[fold]
+    #     pred_arr = torch.round(torch.sigmoid(torch.tensor(pred_arr)))
+    #     pred_arr = np.array([p.item() for p in pred_arr])
+    #     nn_pred_sig.append(pred_arr)
+    # nn_pred_arr = np.array(nn_pred_sig)
+
+
+    for fold in range(5):
+        label = labels[fold]
+        model1 = base_pred[fold]
+        model2 = lin_pred[fold]
+        model3 = nn_pred[fold]
+        print(f"Fold: {fold} ###############")
+        pairwise_stats(label,model1,model2,model3)
+
 
 
