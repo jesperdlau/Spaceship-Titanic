@@ -99,11 +99,104 @@ class RegressionModelHyper2(nn.Module):
         x = self.linear_relu_stack(x)
         return x
 
+# Model with same number of nodes but with different shapes
+class RegressionModelHyper3(nn.Module):
+    def __init__(self, hyper=0):
+        super().__init__()
+        if hyper == 0:
+            self.linear_relu_stack = nn.Sequential(
+                nn.Linear(13, 64),
+                nn.ReLU(),
+                nn.Linear(64, 64),
+                nn.ReLU(),
+                nn.Linear(64, 1))
+        elif hyper == 1:
+            self.linear_relu_stack = nn.Sequential(
+                nn.Linear(13, 32),
+                nn.ReLU(),
+                nn.Linear(32, 32),
+                nn.ReLU(),
+                nn.Linear(32, 32),
+                nn.ReLU(),
+                nn.Linear(32, 32),
+                nn.ReLU(),
+                nn.Linear(32, 1))
+        elif hyper == 2:
+            self.linear_relu_stack = nn.Sequential(
+                nn.Linear(13, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 1))
+
+    def forward(self, x):
+        x = self.linear_relu_stack(x)
+        return x
+
+
+# Classification Model with same number of nodes but with different shapes
+class ClassificationModelHyper3(nn.Module):
+    def __init__(self, hyper=0):
+        super().__init__()
+        if hyper == 0:
+            self.linear_relu_stack = nn.Sequential(
+                nn.Linear(14, 64),
+                nn.ReLU(),
+                nn.Linear(64, 64),
+                nn.ReLU(),
+                nn.Linear(64, 1))
+        elif hyper == 1:
+            self.linear_relu_stack = nn.Sequential(
+                nn.Linear(14, 32),
+                nn.ReLU(),
+                nn.Linear(32, 32),
+                nn.ReLU(),
+                nn.Linear(32, 32),
+                nn.ReLU(),
+                nn.Linear(32, 32),
+                nn.ReLU(),
+                nn.Linear(32, 1))
+        elif hyper == 2:
+            self.linear_relu_stack = nn.Sequential(
+                nn.Linear(14, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 16),
+                nn.ReLU(),
+                nn.Linear(16, 1))
+
+    def forward(self, x):
+        x = self.linear_relu_stack(x)
+        return x
+
 if __name__ == "__main__":
     device = "cuda" if torch.cuda.is_available() else "cpu"
     print(f"Using {device} device")
 
-    model = ClassificationModel().to(device)
+    model = RegressionModelHyper3(hyper=2).to(device)
     print(model)
-    print(model.parameters())
+    #print(model.parameters())
     
