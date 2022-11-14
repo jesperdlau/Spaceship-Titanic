@@ -5,6 +5,7 @@ import numpy as np
 # from scipy import special
 import scipy.stats as st
 #from statsmodels.stats.contingency_tables import mcnemar
+import torch
 
 def mcnemar(y_true, yhatA, yhatB, alpha=0.05, print_stats =False):
     # perform McNemars test
@@ -81,23 +82,34 @@ if __name__ == "__main__":
 
     #pairwise_stats_classification(label,model1,model2,model3)
 
-    label_path = "Spaceship-Titanic/Data/nn_class_labels.npy"
-    class_pred_path = "Spaceship-Titanic/Data/nn_class_pred.npy"
-    log_pred_path = ""
-    base_pred_path = ""
+    label_path = "Spaceship-Titanic/Data/y_test_class.npy"
+    nn_pred_path = "Spaceship-Titanic/Data/nn_class_pred.npy"
+    log_pred_path = "Spaceship-Titanic/Data/class_logistic_pred.npy"
+    base_pred_path = "Spaceship-Titanic/Data/class_baseline_pred.npy"
 
     labels = np.load(label_path, allow_pickle=True)
-    nn_pred = np.load(class_pred_path, allow_pickle=True)
     base_pred = np.load(base_pred_path, allow_pickle=True)
     logreg_pred = np.load(log_pred_path, allow_pickle=True)
+    
+    # Cursed
+    nn_pred = np.load(nn_pred_path, allow_pickle=True)
+    nn_pred_sig = []
+    for fold in range(5):
+        pred_arr = nn_pred[fold]
+        pred_arr = torch.round(torch.sigmoid(torch.tensor(pred_arr)))
+        pred_arr = np.array([p.item() for p in pred_arr])
+        nn_pred_sig.append(pred_arr)
+    nn_pred_arr = np.array(nn_pred_sig)
+
+    
 
 
     for fold in range(5):
-        label = labels[:,fold]
-        model1 = base_pred[:,fold]
-        model2 = logreg_pred[:,fold]
-        model3 = nn_pred[:,fold]
-        print(f"Fold: {fold}")
+        label = labels[fold]
+        model1 = base_pred[fold]
+        model2 = logreg_pred[fold]
+        model3 = nn_pred_arr[fold]
+        print(f"Fold: {fold} ###############")
         pairwise_stats_classification(label,model1,model2,model3)
 
 
