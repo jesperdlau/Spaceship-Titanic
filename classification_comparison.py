@@ -73,13 +73,33 @@ def pairwise_stats_classification(label,model1,model2,model3,print_stats = True)
     return theta_hat_list, CI_list, p_list
 
 if __name__ == "__main__":
-    n = 1000
-    label  = np.array([random.getrandbits(1) for _ in range(n)])
-    model1 = np.array([random.getrandbits(1) for _ in range(n)])
-    model2 = np.array([random.getrandbits(1) for _ in range(n)])   
-    model3 = np.array([1 for _ in range(n)])
+    # n = 1000
+    # label  = np.array([random.getrandbits(1) for _ in range(n)])
+    # model1 = np.array([random.getrandbits(1) for _ in range(n)])
+    # model2 = np.array([random.getrandbits(1) for _ in range(n)])   
+    # model3 = np.array([1 for _ in range(n)])
 
-    pairwise_stats_classification(label,model1,model2,model3)
+    #pairwise_stats_classification(label,model1,model2,model3)
+
+    label_path = "Spaceship-Titanic/Data/nn_class_labels.npy"
+    class_pred_path = "Spaceship-Titanic/Data/nn_class_pred.npy"
+    log_pred_path = ""
+    base_pred_path = ""
+
+    labels = np.load(label_path, allow_pickle=True)
+    nn_pred = np.load(class_pred_path, allow_pickle=True)
+    base_pred = np.load(base_pred_path, allow_pickle=True)
+    logreg_pred = np.load(log_pred_path, allow_pickle=True)
+
+
+    for fold in range(5):
+        label = labels[:,fold]
+        model1 = base_pred[:,fold]
+        model2 = logreg_pred[:,fold]
+        model3 = nn_pred[:,fold]
+        print(f"Fold: {fold}")
+        pairwise_stats_classification(label,model1,model2,model3)
+
 
 # # Own implementation
 # n = 1000
