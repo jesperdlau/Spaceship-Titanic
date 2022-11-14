@@ -56,7 +56,7 @@ def train(dataloader, model, loss_fn, optimizer):
 def train2(dataloader, model, loss_fn, optimizer):
     #size = len(dataloader.dataset)
     model.train()
-    #train_loss = 0
+    train_loss = 0
     for batch_nr, (X, y) in enumerate(dataloader):
         X, y = X.to(device), y.unsqueeze(1).to(device)
 
@@ -70,15 +70,18 @@ def train2(dataloader, model, loss_fn, optimizer):
         optimizer.step()
 
         # Save loss
-        #train_loss += loss.item()
+        train_loss += loss.item()
 
+        #model_par = model.parameters
         # Print info for batch
         #if batch_nr % 50 == 0:
         #    loss, current = loss.item(), batch_nr * len(X)
         #    print(f"Train_loss: {loss:>7f}  [{current:>5d}/{size:>5d}]")
     
-    #epoch_avg_loss = train_loss/len(dataloader_train)
-    return deepcopy(model.state_dict())
+    epoch_avg_loss = train_loss/len(dataloader)
+    #print(f"epoch avg train loss: {epoch_avg_loss}")
+    return epoch_avg_loss, deepcopy(model.state_dict())
+    
 
 
 # Test function
@@ -119,6 +122,76 @@ def test2(dataloader, model, loss_fn):
 
     epoch_avg_loss = test_loss/len(dataloader)
     return epoch_avg_loss
+
+def train_class(dataloader, model, loss_fn, optimizer):
+    model.train()
+    train_loss = 0
+    train_correct = 0
+    for batch_nr, (X, y) in enumerate(dataloader):
+        X, y = X.to(device), y.unsqueeze(1).to(device)
+
+        # Compute prediction error
+        pred = model(X)
+        pred_bin = torch.round(torch.sigmoid(pred))
+        loss = loss_fn(pred_bin, y)
+
+        # Backpropagation
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        # Save loss
+        train_loss += loss.item()
+        train_correct += (pred_bin == y).type(torch.float).sum().item()
+        
+    epoch_avg_loss = train_loss/len(dataloader)
+    train_acc = train_correct/len(dataloader.sampler)
+    return epoch_avg_loss, train_acc
+
+
+def test_class(dataloader, model, loss_fn):
+    model.eval()
+    test_loss = 0
+    test_correct = 0
+    with torch.no_grad():
+        for i, (X, y) in enumerate(dataloader):
+            X, y = X.to(device), y.unsqueeze(1).to(device)
+            pred = model(X)
+            pred_bin = torch.round(torch.sigmoid(pred))
+            
+            # Save loss
+            test_loss += loss_fn(pred_bin, y).item()
+            test_correct += (pred_bin == y).type(torch.float).sum().item()
+            
+    epoch_avg_loss = test_loss/len(dataloader)
+    test_acc = test_correct/len(dataloader.sampler)
+    return epoch_avg_loss, test_acc
+
+def test_class_pred(dataloader, model, loss_fn):
+    model.eval()
+    test_loss = 0
+    test_correct = 0
+    pred_arr = np.zeros(len(dataloader))
+    with torch.no_grad():
+        for i, (X, y) in enumerate(dataloader):
+            X, y = X.to(device), y.unsqueeze(1).to(device)
+            pred = model(X)
+            pred_bin = torch.round(torch.sigmoid(pred))
+            
+            # Save loss
+            test_loss += loss_fn(pred_bin, y).item()
+            test_correct += (pred_bin == y).type(torch.float).sum().item()
+            
+            # Save prediction
+            pred = np.array([p.item() for p in pred])
+            pred_arr[i] = pred.item()
+            
+    epoch_avg_loss = test_loss/len(dataloader)
+    test_acc = test_correct/len(dataloader.sampler)
+    return epoch_avg_loss, test_acc, pred_arr
+
+
+
 
 if __name__ == "__main__":
     # Hyperparameters 
