@@ -78,10 +78,11 @@ for train_ix, test_ix in cv_outer.split(X_train):
     outer_results.append(error_rate)
     print(f"Fold {i}: ",'Error_rate=%.3f, est=%.3f, cfg=%s' % (error_rate, result.best_score_, result.best_params_))
     i+=1
+    print(f"Coef: {result.best_estimator_.coef_}")
 #scores = cross_val_score(search,X_train,y_train,scoring="accuracy",cv=cv_outer,n_jobs=1,error_score="raise")
 
 
 arr = np.array(y_hat_list)
-np.save(save_path,arr)
+#np.save(save_path,arr)
 
 print('Mean error_rate: %.3f (%.3f)' % (np.mean(outer_results), np.std(outer_results)))

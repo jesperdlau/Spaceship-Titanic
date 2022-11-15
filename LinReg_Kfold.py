@@ -61,6 +61,7 @@ for train_ix, test_ix in cv_outer.split(X_train):
 
     outer_results.append(error)
     print(f"Fold {i}: ",'MSE=%.3f, est=%.3f, opt_alpha=%s' % (error, result.best_score_, result.best_params_))
+    print(f"Coef: {result.best_estimator_.coef_}")
     i+=1
 
 # scores = cross_val_score(search,X_train,y_train,scoring="neg_mean_squared_error",cv=cv_outer,n_jobs=1,error_score="raise")
